@@ -5,53 +5,66 @@ using UnityEngine;
 public sealed class Timeline : ActionElement
 {
     [System.Serializable]
-    struct Playable {
+    struct Element {
         public float StartTime;
-        public ActionElement element;
+        public ActionElement action;
     }
 
-    [SerializeField] List<Playable> playables = new List<Playable>();
+    // Inspector
+    [SerializeField] float playbackSpeed = 1;
+    [SerializeField] List<Element> elements = new List<Element>();
 
+    float time = 0;
     float cachedDuration;
     public override float Duration => cachedDuration;
 
-    public override void Evaluate(float progress)
+    // Mono logic
+    private void Start()
     {
-        foreach (var playable in playables) {
-            playable.element.Evaluate(progress);
-        }
-        //throw new System.NotImplementedException();
+        Init();
     }
 
-    public override void PreviewEvaluate(float progress)
+    private void Update()
     {
-        foreach (var playable in playables) {
-            var time = progress * Duration;
-            var localTime = time - playable.StartTime;
-            localTime /= playable.element.Duration;
-            localTime = Mathf.Clamp01(localTime);
-            playable.element.PreviewEvaluate(localTime);
+        time += Time.deltaTime * playbackSpeed;
+
+        if (time > Duration + 0.2f)
+            time = 0;
+        if(time < 0) {
+            time = Duration + 0.2f;
         }
+
+        Evaluate(time);
     }
 
-    // Preview
-    public override void StartPreview(float startTime)
+    // Playable logic
+    public override void Init()
     {
         cachedDuration = -1;
 
-        base.StartPreview(startTime);
-        foreach (var playable in playables) {
-            playable.element.StartPreview(playable.StartTime);
-            if (playable.StartTime + playable.element.Duration > cachedDuration)
-                cachedDuration = playable.StartTime + playable.element.Duration;
+        foreach (var e in elements) {
+            // Sets cached duration to biggest endTime of all playables
+            cachedDuration = Mathf.Max(
+                cachedDuration, 
+                e.StartTime + e.action.Duration); // End time of element
         }
     }
 
-    public override void EndPreview()
+    public override void Evaluate(float time)
     {
-        base.EndPreview();
-        foreach (var playable in playables) {
-            playable.element.EndPreview();
+        foreach (var e in elements) {
+            // Check is element should be active
+            bool playableActive = time > e.StartTime && time < e.StartTime + e.action.Duration;
+            e.action.SetActive(playableActive);
+
+            if (!e.action.IsActive && playableActive) {
+                // Element was just activated
+                e.action.Init();
+            }
+
+            // If it should, evaluates it using time offsetted by startTime
+            if (playableActive)
+                e.action.Evaluate(time - e.StartTime);
         }
     }
 }

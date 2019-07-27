@@ -149,17 +149,19 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e630ec729bfdd294dacac46d8d81b661, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  playables:
+  time: 0
+  playbackSpeed: 2
+  elements:
   - StartTime: 0
-    element: {fileID: 1482926500}
-  - StartTime: 2
-    element: {fileID: 536417192}
-  - StartTime: 4
-    element: {fileID: 1226990440}
-  - StartTime: 8
-    element: {fileID: 511894533}
-  - StartTime: 9
-    element: {fileID: 346597496}
+    action: {fileID: 1482926500}
+  - StartTime: 0.8
+    action: {fileID: 536417192}
+  - StartTime: 1.6
+    action: {fileID: 1226990440}
+  - StartTime: 3.2
+    action: {fileID: 511894533}
+  - StartTime: 3.6
+    action: {fileID: 346597496}
 --- !u!4 &94930398
 Transform:
   m_ObjectHideFlags: 0
@@ -204,7 +206,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 261e380f4eb33f244bd57543f3ee065c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  duration: 5
+  duration: 2
   scale: {x: 1, y: 1}
   animationCurve:
     serializedVersion: 2
@@ -248,7 +250,7 @@ MonoBehaviour:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
-  rotationSpeed: 2
+  rotationSpeed: 0.5
 --- !u!212 &346597497
 SpriteRenderer:
   m_ObjectHideFlags: 0
@@ -342,7 +344,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 261e380f4eb33f244bd57543f3ee065c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  duration: 5
+  duration: 2
   scale: {x: 1, y: 1}
   animationCurve:
     serializedVersion: 2
@@ -386,7 +388,7 @@ MonoBehaviour:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
-  rotationSpeed: 2
+  rotationSpeed: 0.5
 --- !u!212 &511894534
 SpriteRenderer:
   m_ObjectHideFlags: 0
@@ -503,7 +505,7 @@ Camera:
   far clip plane: 1000
   field of view: 60
   orthographic: 1
-  orthographic size: 5
+  orthographic size: 1.8
   m_Depth: -1
   m_CullingMask:
     serializedVersion: 2
@@ -563,7 +565,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 261e380f4eb33f244bd57543f3ee065c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  duration: 5
+  duration: 2
   scale: {x: 1, y: 1}
   animationCurve:
     serializedVersion: 2
@@ -607,7 +609,7 @@ MonoBehaviour:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
-  rotationSpeed: 2
+  rotationSpeed: 0.5
 --- !u!212 &536417193
 SpriteRenderer:
   m_ObjectHideFlags: 0
@@ -701,7 +703,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 261e380f4eb33f244bd57543f3ee065c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  duration: 5
+  duration: 2
   scale: {x: 1, y: 1}
   animationCurve:
     serializedVersion: 2
@@ -745,7 +747,7 @@ MonoBehaviour:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
-  rotationSpeed: 2
+  rotationSpeed: 0.5
 --- !u!212 &1226990441
 SpriteRenderer:
   m_ObjectHideFlags: 0
@@ -902,7 +904,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 261e380f4eb33f244bd57543f3ee065c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  duration: 5
+  duration: 2
   scale: {x: 1, y: 1}
   animationCurve:
     serializedVersion: 2
@@ -946,4 +948,4 @@ MonoBehaviour:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
-  rotationSpeed: 2
+  rotationSpeed: 0.5

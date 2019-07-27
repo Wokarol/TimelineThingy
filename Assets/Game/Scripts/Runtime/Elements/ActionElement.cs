@@ -4,19 +4,30 @@ using UnityEngine;
 
 public abstract class ActionElement : MonoBehaviour
 {
+    public bool IsActive { get; private set; } = false;
+
+    /// <summary>
+    /// Duration of element is seconds
+    /// </summary>
     public abstract float Duration { get; }
 
-    public virtual void Init(float startTime) { }
-    public abstract void Evaluate(float progress);
-
-#if UNITY_EDITOR
     /// <summary>
-    /// Don't include base if you don't want to call Evalate in preview
+    /// Called when Element is enabled
     /// </summary>
-    /// <param name="progress"></param>
-    public virtual void PreviewEvaluate(float progress) => Evaluate(progress);
+    public virtual void Init() { }
 
-    public virtual void StartPreview(float startTime) => Init(startTime);
-    public virtual void EndPreview() { } 
-#endif
+    /// <summary>
+    /// Evaluates element based on time
+    /// </summary>
+    /// <param name="time">Time, in seconds</param>
+    public abstract void Evaluate(float time);
+
+    /// <summary>
+    /// Determines if element should be active
+    /// </summary>
+    public virtual void SetActive(bool state)
+    {
+        gameObject.SetActive(state);
+        IsActive = state;
+    }
 }

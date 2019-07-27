@@ -11,36 +11,20 @@ public class PopAndRotate : ActionElement
     [SerializeField] float rotationSpeed = 5;
 
     float randomOffset;
-
     public override float Duration => duration;
 
-    public override void Init(float startTime)
+    public override void Init()
     {
+        // Adds random offset and resets element's state
         randomOffset = Random.Range(0, 360f);
+        transform.localScale = Vector3.zero;
     }
 
     public override void Evaluate(float progress)
     {
-        transform.localScale = scale * animationCurve.Evaluate(progress);
+        // Scales element according to curve and rotates it
+        transform.localScale = scale * animationCurve.Evaluate(progress / duration);
         transform.localScale += Vector3.forward;
         transform.localRotation = Quaternion.Euler(0, 0, randomOffset + (progress * 360f * rotationSpeed));
     }
-
-    // Preview cache
-#if UNITY_EDITOR
-    Vector3 scalePreviewCache;
-    Quaternion rotationPreviewCache;
-    public override void StartPreview(float startTime)
-    {
-        base.StartPreview(startTime);
-        scalePreviewCache = transform.localScale;
-        rotationPreviewCache = transform.localRotation;
-    }
-
-    public override void EndPreview()
-    {
-        transform.localScale = scalePreviewCache;
-        transform.localRotation = rotationPreviewCache;
-    } 
-#endif
 }
