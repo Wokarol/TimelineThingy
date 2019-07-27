@@ -12,9 +12,9 @@ public abstract class ActionElement : MonoBehaviour
     public abstract float Duration { get; }
 
     /// <summary>
-    /// Called when Element is enabled
+    /// Called when Element is started
     /// </summary>
-    public virtual void Init() { }
+    public virtual void Init(bool firstTime) { }
 
     /// <summary>
     /// Evaluates element based on time

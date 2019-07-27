@@ -13,7 +13,7 @@ public class PopAndRotate : ActionElement
     float randomOffset;
     public override float Duration => duration;
 
-    public override void Init()
+    public override void Init(bool firstTime)
     {
         // Adds random offset and resets element's state
         randomOffset = Random.Range(0, 360f);

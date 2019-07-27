@@ -7,11 +7,12 @@ public sealed class Timeline : ActionElement
     [System.Serializable]
     struct Element {
         public float StartTime;
-        public ActionElement action;
+        public ActionElement Action;
     }
 
     // Inspector
     [SerializeField] float playbackSpeed = 1;
+    [SerializeField] bool autoUpdate = true;
     [SerializeField] List<Element> elements = new List<Element>();
 
     float time = 0;
@@ -21,32 +22,50 @@ public sealed class Timeline : ActionElement
     // Mono logic
     private void Start()
     {
-        Init();
+        Init(true);
     }
 
     private void Update()
     {
-        time += Time.deltaTime * playbackSpeed;
+        if (autoUpdate) {
+            time += Time.deltaTime * playbackSpeed;
 
-        if (time > Duration + 0.2f)
-            time = 0;
-        if(time < 0) {
-            time = Duration + 0.2f;
+            if (time > Duration + 0.2f)
+                time = 0;
+            if (time < 0) {
+                time = Duration + 0.2f;
+            }
+
+            Evaluate(time); 
         }
-
-        Evaluate(time);
     }
 
     // Playable logic
-    public override void Init()
-    {
-        cachedDuration = -1;
 
+    public override void Init(bool firstTime)
+    {
+        if (firstTime) {
+            cachedDuration = -1;
+
+            foreach (var e in elements) {
+                e.Action.Init(true);
+
+                // Sets cached duration to biggest endTime of all playables
+                cachedDuration = Mathf.Max(
+                    cachedDuration,
+                    e.StartTime + e.Action.Duration); // End time of element
+            }
+            foreach (var e in elements) {
+                e.Action.SetActive(false);
+            } 
+        }
+    }
+
+    public override void SetActive(bool state)
+    {
+        base.SetActive(state);
         foreach (var e in elements) {
-            // Sets cached duration to biggest endTime of all playables
-            cachedDuration = Mathf.Max(
-                cachedDuration, 
-                e.StartTime + e.action.Duration); // End time of element
+            e.Action.SetActive(state);
         }
     }
 
@@ -54,17 +73,17 @@ public sealed class Timeline : ActionElement
     {
         foreach (var e in elements) {
             // Check is element should be active
-            bool playableActive = time > e.StartTime && time < e.StartTime + e.action.Duration;
-            e.action.SetActive(playableActive);
+            bool playableActive = time > e.StartTime && time < e.StartTime + e.Action.Duration;
+            e.Action.SetActive(playableActive);
 
-            if (!e.action.IsActive && playableActive) {
+            if (!e.Action.IsActive && playableActive) {
                 // Element was just activated
-                e.action.Init();
+                e.Action.Init(false);
             }
 
             // If it should, evaluates it using time offsetted by startTime
             if (playableActive)
-                e.action.Evaluate(time - e.StartTime);
+                e.Action.Evaluate(time - e.StartTime);
         }
     }
 }
